@@ -61,10 +61,7 @@ public class MetaManager : MonoBehaviour
 
     private void Update()
     {
-        if (inChallengePlayer != null)
-        {
-            Debug.Log(inChallengePlayer.NickName);
-        }
+       
     }
     public void StopMovement()
     {

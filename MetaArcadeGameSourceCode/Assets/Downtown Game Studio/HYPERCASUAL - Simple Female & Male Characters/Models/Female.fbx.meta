@@ -1,9 +1,19 @@
 fileFormatVersion: 2
 guid: 64c3ff928e8db8044bdb21ae9b54a4eb
 ModelImporter:
-  serializedVersion: 20101
+  serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Female
+    second: {fileID: 2100000, guid: 092b3dae94578224e87d95711e5d1611, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Female
+    second: {fileID: 2800000, guid: dc0e6ac82e79d874ab78dc9a5d8f9f8b, type: 3}
   materials:
     materialImportMode: 1
     materialName: 0
@@ -95,6 +105,7 @@ ModelImporter:
   animationType: 2
   humanoidOversampling: 1
   avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
   additionalBone: 0
   userData: 
   assetBundleName: 

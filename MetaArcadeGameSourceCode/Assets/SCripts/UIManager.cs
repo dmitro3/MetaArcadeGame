@@ -572,6 +572,11 @@ public class UIManager : MonoBehaviour
         BlockChainManager.Instance.purchaseItem(nft_coontract_id-496, false);      
     }
 
+    public void BuyThemeFromShop(int index)
+    {        
+        BlockChainManager.Instance.purchaseItem(index, false);
+    }
+
     public void ShowNoCoinsPopup()
     {
         MetaManager.insta.myPlayer.GetComponent<PlayerController>().StopMovement();

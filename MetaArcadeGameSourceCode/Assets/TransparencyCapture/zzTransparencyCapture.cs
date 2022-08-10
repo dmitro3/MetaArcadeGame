@@ -50,7 +50,7 @@ public class zzTransparencyCapture
     /// <returns></returns>
     public static Texture2D captureScreenshot()
     {
-        return capture(new Rect(0f, 0f, 1024, 1024));
+        return capture(new Rect(0f, 0f, Screen.width, Screen.height));
     }
 
     /// <summary>

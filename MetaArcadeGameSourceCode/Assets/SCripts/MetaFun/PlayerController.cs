@@ -202,20 +202,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
 
         if (pv.IsMine)
         {
-            #region Tutorial Playerprefs
-            if (!PlayerPrefs.HasKey("mini_0"))
-            {
-                PlayerPrefs.SetInt("mini_0", 0);
-                PlayerPrefs.SetInt("mini_1", 0);
-                PlayerPrefs.SetInt("mini_2", 0);
-                PlayerPrefs.SetInt("mini_3", 0);
-                PlayerPrefs.SetInt("mini_4", 0);
-                PlayerPrefs.SetInt("mini_5", 0);
-            }
-            #endregion
 
             //TEST
-            PhotonNetwork.LocalPlayer.NickName = UnityEngine.Random.Range(0, 5000).ToString();
+            
             data = new PlayerData();
 
 
@@ -1236,8 +1225,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
     }
     public void SelectMaterial(int index)
     {
+        player_selected_road = index - 399;
         data.localdata.selected_road = index - 399;
-        player_selected_road = data.localdata.selected_road;
+
+        Debug.Log(player_selected_road);
         data.UpdateData();
         SetMaterials();
     }
@@ -1272,7 +1263,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
     }
     public void IncreaseXP(bool won)
     {
-        if (won)
+        //if (won)
         {
             data.localdata.xp += 100;
 
@@ -1287,6 +1278,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
             }
            
         }
+
+        LeanTween.value(level_progressBar.gameObject, (float)level_progressBar.fillAmount, (float)data.localdata.xp / ((float)(data.localdata.level + 1) * 100), 0.5f).setOnUpdate((float v) => {
+            level_progressBar.fillAmount = v;
+        });
 
         UIManager.insta.ShowNFTPopup(data.localdata.level);
         txt_level_no.text = data.localdata.level.ToString();

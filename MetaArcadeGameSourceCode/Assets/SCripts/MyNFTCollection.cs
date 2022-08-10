@@ -111,6 +111,7 @@ public class MyNFTCollection : MonoBehaviour
 
     public void SelectSkin(int i)
     {
+        Debug.Log(i);
         MetaManager.insta.myPlayer.GetComponent<PlayerController>().SelectMaterial(i);
     }
 

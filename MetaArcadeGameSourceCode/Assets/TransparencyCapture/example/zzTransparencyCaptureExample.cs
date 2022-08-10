@@ -14,7 +14,7 @@ public class zzTransparencyCaptureExample:MonoBehaviour
     public IEnumerator capture()
     {
         //capture whole screen
-        Rect lRect = new Rect(0f,0f,1024,1024);
+        Rect lRect = new Rect(0f,0f,Screen.width, Screen.height);
         if(capturedImage)
             Destroy(capturedImage);
 
