@@ -52,8 +52,8 @@ public class SideObject : MonoBehaviour
 
         if (isTree)
         {
-            this.transform.Translate(Vector3.back * speedMultiplier * RaceObjectPool.Instance.speed * Time.deltaTime);
-            if (this.transform.position.z < -30)
+            this.transform.Translate(Vector3.back * speedMultiplier * RaceObjectPool.Instance.speed * Time.deltaTime,Space.World);
+            if (this.transform.localPosition.z < -30)
             {
                 this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y, 160);
             }

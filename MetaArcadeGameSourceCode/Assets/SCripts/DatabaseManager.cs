@@ -360,6 +360,7 @@ public class LocalData
     public int score = 10;
     public int characterNo = 0;
     public int level = 0;
+    public int selected_road=0;
     public string last_spin_time= "0";
     public int xp = 0;
     public List<TranscationInfo> transactionsInformation = new List<TranscationInfo>();
@@ -374,6 +375,7 @@ public class LocalData
         characterNo = 0;
         xp = 0;
         level = 0;
+        selected_road=0;
         last_spin_time = "0";
         transactionsInformation = new List<TranscationInfo>();
     }

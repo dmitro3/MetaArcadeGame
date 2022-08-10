@@ -40,7 +40,7 @@ public class MessaeBox : MonoBehaviour
     public void RetryClaim()
     {
         retryBoxUI.SetActive(false);
-        BlockChainManager.Instance.purchaseItem(temp_id, true);
+        BlockChainManager.Instance.purchaseItem(temp_id, false);
       
     }
     public void CancelClaim()

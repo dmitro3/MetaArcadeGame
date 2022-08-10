@@ -77,20 +77,22 @@ public class RaceObjectPool : MonoBehaviour
         Barrier.OnBarrierDisabled -= OnBarrierGotDisabled;
     }
 
-    public void SetMaterials(int roadMaterial, int sideObjectIndex)
+    public void SetMaterials(int roadMaterial)
     {
         road.material = RoadMaterials[roadMaterial];
 
-        for (int i = 0; i < SideObjects.Length; i++)
+       /* for (int i = 0; i < SideObjects.Length; i++)
         {
             SideObjects[i].gameObject.SetActive(false);
         }
-        SideObjects[sideObjectIndex].gameObject.SetActive(true);
+        SideObjects[sideObjectIndex].gameObject.SetActive(true);*/
     }
     public void StartRace()
-    { 
-        isRaceOn = true;
+    {
         OnRaceStarted?.Invoke();
+
+        isRaceOn = true;
+       
     }
 
     private void FixedUpdate()

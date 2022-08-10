@@ -70,22 +70,22 @@ public class MyNFTCollection : MonoBehaviour
         temp.GetComponent<Button>().onClick.AddListener(() => { SelectItem(tokenId, DatabaseManager.Instance.GetNFTTexture(tokenId)); });
         //var tempNo = i;
         //var tempTexture = SingletonDataManager.metanftlocalData[i].imageTexture;
-        if (tokenId == 400 || tokenId == 401)
+        if (tokenId == 400 || tokenId == 401 || tokenId == 402 || tokenId == 403)
         {
-            //temp.transform.GetChild(3).gameObject.SetActive(true);
-            temp.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(() => BurnNFT(tokenId));
+            temp.transform.GetChild(3).gameObject.SetActive(true);
+            temp.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(() => SelectSkin(tokenId));
         }
     }
 
     public void SelectItem(int _no, Texture _texture)
     {
         okBTN.SetActive(true);
-        if (_no == 400 || _no == 401)
+        if (_no == 400 || _no == 401 || _no == 402 || _no == 403 )
         {
-            okBTN.transform.GetChild(0).GetComponent<TMP_Text>().text = "Claim";
+            okBTN.transform.GetChild(0).GetComponent<TMP_Text>().text = "Select";
             okBTN.GetComponent<Button>().onClick.RemoveAllListeners();
             okBTN.GetComponent<Button>().onClick.AddListener(()=> {
-                BurnNFT(_no);
+                SelectSkin(_no);
                 okBTN.SetActive(false);
             });
         }
@@ -109,9 +109,9 @@ public class MyNFTCollection : MonoBehaviour
         }
     }
 
-    public void BurnNFT(int i)
+    public void SelectSkin(int i)
     {
-        BlockChainManager.Instance.BurnOnSendContract(i);
+        MetaManager.insta.myPlayer.GetComponent<PlayerController>().SelectMaterial(i);
     }
 
     public void ClosePurchasePanel()

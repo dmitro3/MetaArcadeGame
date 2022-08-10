@@ -24,6 +24,6 @@ public class MainUIManager : MonoBehaviour
     {
         playBTN.SetActive(false);
         LoadingPanel.SetActive(true);
-        SceneManager.LoadScene("MetaFun");
+        SceneManager.LoadScene("MetaArcade");
     }
 }

@@ -223,6 +223,7 @@ public class BlockChainManager : MonoBehaviour
             string response = await Web3Wallet.SendTransaction(chainId, contract, "0", data, gasLimit, gasPrice);
             Debug.Log(response);
 #endif
+            if (MessaeBox.insta) MessaeBox.insta.showMsg("Your Transaction has been recieved\nIt will reflect to your account once it is completed!", true);
         }
         catch (Exception e)
         {
@@ -470,32 +471,22 @@ public class BlockChainManager : MonoBehaviour
     #region NFTUploaded
 
   
-    public void purchaseItem(int _id, bool _burnable)
+    public void purchaseItem(int _id, bool _skin)
     {
         Debug.Log("purchaseItem");
 
         MetadataNFT meta = new MetadataNFT();
 
-        if (_burnable)
-        {
+       
             meta.itemid = DatabaseManager.allMetaDataServer[_id].itemid;
             meta.name = DatabaseManager.allMetaDataServer[_id].name;
             meta.description = DatabaseManager.allMetaDataServer[_id].description;
             meta.image = DatabaseManager.allMetaDataServer[_id].imageurl;
 
-            StartCoroutine(UploadNFTMetadata(Newtonsoft.Json.JsonConvert.SerializeObject(meta), _id, _burnable));
-        }
-        else
-        {
-            meta.itemid = DatabaseManager.allMetaDataServer[_id+2].itemid;
-            meta.name = DatabaseManager.allMetaDataServer[_id+2].name;
-            meta.description = DatabaseManager.allMetaDataServer[_id+2].description;
-            meta.image = DatabaseManager.allMetaDataServer[_id+2].imageurl;
-
-            StartCoroutine(UploadNFTMetadata(Newtonsoft.Json.JsonConvert.SerializeObject(meta), _id, _burnable));
-        }
+            StartCoroutine(UploadNFTMetadata(Newtonsoft.Json.JsonConvert.SerializeObject(meta), _id, _skin));
+       
     }
-    IEnumerator UploadNFTMetadata(string _metadata, int _id, bool _burnable)
+    IEnumerator UploadNFTMetadata(string _metadata, int _id, bool _skin)
     {
         if(MessaeBox.insta) MessaeBox.insta.showMsg("NFT purchase process started\nThis can up to minute", false);
         Debug.Log("Creating and saving metadata to IPFS..." + _metadata);
@@ -513,7 +504,7 @@ public class BlockChainManager : MonoBehaviour
                 Debug.Log(www.error);
                 Debug.Log("UploadNFTMetadata upload error " + www.downloadHandler.text);
                 
-                if (_burnable)
+                if (_skin)
                 {
                     if (MessaeBox.insta)
                     {
@@ -539,7 +530,7 @@ public class BlockChainManager : MonoBehaviour
                     //SingletonDataManager.tokenID = j.GetField("value").GetField("ipnft").stringValue; //ipnft
                     Debug.Log("Metadata saved successfully");
                     //PurchaseItem(cost, _id);
-                    if(_burnable) BurnableNFTBuyContract(_id, j.GetField("value").GetField("url").stringValue);
+                    if(_skin) BurnableNFTBuyContract(_id, j.GetField("value").GetField("url").stringValue);
                     else NonBurnNFTBuyContract(_id, j.GetField("value").GetField("url").stringValue);
                 }
             }

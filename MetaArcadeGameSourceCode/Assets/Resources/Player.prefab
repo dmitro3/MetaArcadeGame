@@ -584,6 +584,7 @@ MonoBehaviour:
   movementSpeed: 4
   sprintSpeed: 10
   lastWorldPos: {x: 0, y: 0, z: 0}
+  race_timer: 0
   player_selected_road: 3
   player_selected_side_road: 4
   jumpForce: 8

@@ -59,6 +59,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
     [SerializeField] Vector3 lastWorldPos;
 
 
+    [SerializeField] float race_timer = 0;
     [SerializeField] int player_selected_road;
     [SerializeField] int player_selected_side_road;
 
@@ -110,6 +111,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
 
     [Header("Common Properties")]
     private const float _threshold = 0.01f;
+
+   
+
     [SerializeField] float gravity = 9.81f;
     [SerializeField] LayerMask groundLayer;
     [SerializeField] GameObject meetObj;
@@ -214,7 +218,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
             PhotonNetwork.LocalPlayer.NickName = UnityEngine.Random.Range(0, 5000).ToString();
             data = new PlayerData();
 
-            SetMaterials();
+
+         
 
             _cinemachineTargetYaw = vCamTarget.transform.rotation.eulerAngles.y;
 
@@ -277,6 +282,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
             Debug.Log((float)data.localdata.xp / ((float)(data.localdata.level + 1) * 100));
 
             level_progressBar.fillAmount = (float)data.localdata.xp / ((float)(data.localdata.level + 1) * 100);
+
+            player_selected_road = data.localdata.selected_road;
+            SetMaterials();
         }
 
         usernameText.text = pv.Owner.NickName;
@@ -292,8 +300,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
 
     async void Start()
     {
-       /* if (pv.IsMine)
-        {           
+        if (pv.IsMine)
+        {
             UIManager.insta.ToggleLoadingPanel(true);
 
             long lastTimeSpin = long.Parse(data.localdata.last_spin_time);
@@ -309,7 +317,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
             //if (lastTimeSpin != null && currentTime != null)
             {
                 //TimeSpan ts = currentTime - lastTimeSpin;
-                if (diff > 86400)
+               if (diff > 86400)
                 {
                     StopMovement();
                     MetaManager.insta.ToggleSpinUI(true);
@@ -317,8 +325,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
             }
 
             UIManager.insta.ToggleLoadingPanel(false);
-        }*/
+        }
     }
+   
     
     void showHealthBar(bool _show)
     {
@@ -483,8 +492,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
                 selected_emote = emote_wheel_controller.ID;
             }
 
-           
 
+            if (RaceObjectPool.isRaceOn)
+            {
+                race_timer += Time.deltaTime;
+            }
 
 /*
             if (playerActionAsset.Player.Attack.triggered && MetaManager.isFighting && !animator.GetBool("attack"))
@@ -511,6 +523,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
                 
         }
     }
+
+    
+
     private void LateUpdate()
     {
 
@@ -836,8 +851,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
         lastWorldPos = this.transform.position;
 
         MetaManager.isPlayingMinigame = true;
-       
 
+        race_timer = 0;
         isRaceBegan = false;
 
         Vector3 pos = RaceObjectPool.Instance.gameObject.transform.position;
@@ -1179,12 +1194,15 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
                 {
                     //isFreeGames = true;
 
-                   // BlockChainManager.Instance.purchaseItem(0, true);
+                    // BlockChainManager.Instance.purchaseItem(0, true);
+                    data.localdata.score += 10;
+                    data.UpdateData();
+                    UIManager.insta.UpdatePlayerUIData(true, data.localdata);
                     break;
                 }
             case 5:
                 {
-                   // BlockChainManager.Instance.purchaseItem(1, true);
+                    BlockChainManager.Instance.purchaseItem(0, false);
                     //isDoubleCoins = true;
                     break;
                 }
@@ -1197,7 +1215,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
         if (pv.IsMine)
         {
             Debug.Log("HIT"+ hit.transform.name);
-            /*if (hit.transform.CompareTag("barrier"))
+            if (hit.transform.CompareTag("barrier"))
             {
                 if (MetaManager.isPlayingMinigame)
                 {
@@ -1205,19 +1223,23 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
                     {
                         pv.RPC("GameOver", MetaManager.inChallengePlayer);
                     }
-
                     RaceOver(false);
-                   
-
                 }
-            }           */
+            }         
         }
     }
 
 
     public void SetMaterials()
     {
-        RaceObjectPool.Instance.SetMaterials(player_selected_road, player_selected_side_road);
+        RaceObjectPool.Instance.SetMaterials(player_selected_road);
+    }
+    public void SelectMaterial(int index)
+    {
+        data.localdata.selected_road = index - 399;
+        player_selected_road = data.localdata.selected_road;
+        data.UpdateData();
+        SetMaterials();
     }
     public void RaceOver(bool _won)
     {
@@ -1226,7 +1248,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
           //  this.transform.position = lastWorldPos;
             isDragging = false;
             animator.SetFloat("speed", 0);
-            Debug.Log(" I won the game? " + _won);
+            Debug.Log(" I won the game? " + _won + " ,Race Timer is "+ race_timer);
             isRaceBegan = false;
             MetaManager.isPlayingMinigame = false;
             isSprinting = false;
@@ -1237,10 +1259,39 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
             cc.enabled = false;
             this.transform.position = lastWorldPos;
             cc.enabled = true;
-            
+
+            int stars_got = (int)race_timer / 2;
+            UIManager.insta.ShowGameCompleteUI(_won, stars_got);
+            data.localdata.score += stars_got;
+            data.UpdateData();
+            UIManager.insta.UpdatePlayerUIData(true, data.localdata);
+           
 
             StartCoroutine(Resetplayer());
         }
+    }
+    public void IncreaseXP(bool won)
+    {
+        if (won)
+        {
+            data.localdata.xp += 100;
+
+            if (data.localdata.xp >= (data.localdata.level * 100) + 100)
+            {
+                //if (data.localdata.level < 5)
+                {
+                    data.localdata.level++;
+                    data.localdata.xp -= data.localdata.level * 100;
+                    data.UpdateData();
+                }
+            }
+           
+        }
+
+        UIManager.insta.ShowNFTPopup(data.localdata.level);
+        txt_level_no.text = data.localdata.level.ToString();
+        
+        UIManager.insta.UpdatePlayerUIData(true, data.localdata);
     }
     IEnumerator Resetplayer()
     {
