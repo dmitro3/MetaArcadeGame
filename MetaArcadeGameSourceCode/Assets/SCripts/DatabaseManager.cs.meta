@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:MetaFunWorldSource/Assets/BlockChainManager.cs.meta
+guid: f84086d78bc0a51459f8c81c5f666fed
+========
+guid: 2c24ae6f4ce8f8041a3acf140cdc4c64
+>>>>>>>> TestDevelop2:MetaFunWorldSource/Assets/DatabaseManager.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
