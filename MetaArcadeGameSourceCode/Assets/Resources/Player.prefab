@@ -577,7 +577,7 @@ MonoBehaviour:
   TopClamp: 80
   BottomClamp: -40
   TopClamp_Race: 70
-  BottomClamp_Race: 21
+  BottomClamp_Race: 23
   CameraAngleOverride: 0
   sensitivity: 0.05
   usernameText: {fileID: 9149257737719911210}

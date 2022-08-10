@@ -643,6 +643,14 @@ public class UIManager : MonoBehaviour
 
         StartCoroutine(disableTextInfo());
     }
+    public void ShowInfoMsg(string info)
+    {
+        txt_information.transform.parent.gameObject.SetActive(true);
+        
+        txt_information.text = info;       
+
+        StartCoroutine(disableTextInfo());
+    }
     IEnumerator disableTextInfo()
     {
         yield return new WaitForSeconds(3f);

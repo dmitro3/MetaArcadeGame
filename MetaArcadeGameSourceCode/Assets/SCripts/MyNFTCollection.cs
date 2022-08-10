@@ -112,6 +112,7 @@ public class MyNFTCollection : MonoBehaviour
     public void SelectSkin(int i)
     {
         Debug.Log(i);
+        UIManager.insta.ShowInfoMsg("Changed Theme");
         MetaManager.insta.myPlayer.GetComponent<PlayerController>().SelectMaterial(i);
     }
 
