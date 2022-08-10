@@ -26,9 +26,6 @@ public class DatabaseManager : MonoBehaviour
     
     #endregion
 
-    private const string getProfile_api = "https://firestore.googleapis.com/v1/projects/metahackprojects/databases/(default)/documents/metafunworld_userdata/";
-
-    private const string getgameNFTData_api = "https://firestore.googleapis.com/v1/projects/metahackprojects/databases/(default)/documents/metafunworld_gamedata/nft_data";
 
 
     private LocalData data=new LocalData();
@@ -36,6 +33,7 @@ public class DatabaseManager : MonoBehaviour
     public static List<MetaFunNFTLocal> allMetaDataServer = new List<MetaFunNFTLocal>();
     public LocalData GetLocalData()
     {
+       
         return data;
     }
 
@@ -52,7 +50,7 @@ public class DatabaseManager : MonoBehaviour
         JSONObject b = new JSONObject();
         JSONObject c = new JSONObject();
         //JSONObject d = new JSONObject();
-        string url = getProfile_api + PlayerPrefs.GetString("Account", "test").ToLower();
+        string url = ConstantManager.getProfile_api + PlayerPrefs.GetString("Account", "test").ToLower();
         switch (dataType)
         {
             case 0:
@@ -112,7 +110,7 @@ public class DatabaseManager : MonoBehaviour
 
     IEnumerator CheckProfile()
     {
-        string url = getProfile_api + PlayerPrefs.GetString("Account", "test").ToLower();
+        string url = ConstantManager.getProfile_api + PlayerPrefs.GetString("Account", "test").ToLower();
 
         using (UnityWebRequest www = UnityWebRequest.Get(url))
         {
@@ -167,7 +165,7 @@ public class DatabaseManager : MonoBehaviour
     IEnumerator getNFTAllData()
     {
         
-        using (UnityWebRequest www = UnityWebRequest.Get(getgameNFTData_api))
+        using (UnityWebRequest www = UnityWebRequest.Get(ConstantManager.getgameNFTData_api))
         {
               www.timeout = 60;
               yield return www.SendWebRequest();
