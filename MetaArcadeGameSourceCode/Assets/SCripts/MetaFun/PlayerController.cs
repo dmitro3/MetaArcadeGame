@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
 {
@@ -479,11 +480,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
                 isSprinting = _actionSprint.IsPressed();
                 animator.SetFloat("runspeed",1);
 
-                if(playerActionAsset.Player.Attack.triggered && isOnGround && !animator.GetBool("punch"))
+                if(!EventSystem.current.IsPointerOverGameObject() && playerActionAsset.Player.Attack.triggered && isOnGround && !animator.GetBool("punch") && !animator.GetBool("hit"))
                 {
                     StopMovement();
-                    animator.SetBool("punch", true);
-                    
+                   
+                    animator.SetBool("punch", true);                    
                     StartCoroutine(ResetAttack());
                 }
             }
@@ -532,6 +533,19 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
     public void AttackRecieved(Vector3 position)
     {
         Debug.Log("Attack Recieved");
+        if (playerNo == 0)
+        {
+            AudioManager.insta.playSound(0);
+        }
+        else
+        {
+            AudioManager.insta.playSound(1);
+        }
+
+        animator.SetBool("hit", true);
+        StartCoroutine(resetHitImpact());
+
+
         impact = (this.transform.position - position);
         LeanTween.move(MetaManager.insta.tempObject, Vector3.zero, 0.3f).setFrom(impact).setEase(punchEffect).setOnUpdate((Vector3 pos)=> {
             impact = pos;
@@ -543,19 +557,25 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
     public void AttackRecieved(string attacker_id)
     {
         MetaManager.insta.myPlayer.GetComponent<PlayerController>().AttackRecieved(this.transform.position);
+        
+    }
+    IEnumerator resetHitImpact()
+    {
+        yield return new WaitForSeconds(0.1f);
+        animator.SetBool("hit", false);
     }
 
     IEnumerator ResetAttack()
     {
         yield return new WaitForSeconds(0.15f);
         WeaponCollider.SetActive(true);
-        animator.SetBool("punch", false);
 
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(0.1f);
 
+        AudioManager.insta.playSound(8);
         WeaponCollider.SetActive(false);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.4f);
+        animator.SetBool("punch", false);
         ResumeMovement();
        
     }

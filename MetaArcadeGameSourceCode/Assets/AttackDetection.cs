@@ -20,6 +20,7 @@ public class AttackDetection : MonoBehaviour
             {
                 if (pv.Owner != p_view.Owner)
                 {
+                   
                     this.gameObject.SetActive(false);
                     pv.RPC("AttackRecieved", p_view.Owner, pv.Owner.UserId);
                 }

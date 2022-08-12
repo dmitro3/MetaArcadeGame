@@ -1330,6 +1330,9 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: punch
+  - Type: 4
+    SynchronizeType: 2
+    Name: hit
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -1480,6 +1483,9 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: punch
+  - Type: 4
+    SynchronizeType: 2
+    Name: hit
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
