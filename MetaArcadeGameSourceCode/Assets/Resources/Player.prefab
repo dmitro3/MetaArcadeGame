@@ -671,8 +671,6 @@ MonoBehaviour:
   virtualWorldUI: {fileID: 3829796611937145366}
   meetUI: {fileID: 1792804063992667925}
   pv: {fileID: -4672122159140333503}
-  isFreeGames: 0
-  isDoubleCoins: 0
   txt_tutorialtext: {fileID: 0}
   tutorial_image: {fileID: 0}
   isOnGround: 0
@@ -1333,6 +1331,9 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: hit
+  - Type: 1
+    SynchronizeType: 2
+    Name: attack_id
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -1486,6 +1487,9 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: hit
+  - Type: 1
+    SynchronizeType: 2
+    Name: attack_id
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0

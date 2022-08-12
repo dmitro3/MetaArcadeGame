@@ -682,12 +682,7 @@ public class UIManager : MonoBehaviour
        // PhotonView photonView = PhotonView.Get(this);
        // photonView.RPC("UpdateHealthMe", RpcTarget.All, PhotonNetwork.LocalPlayer.UserId);
     }
-    [PunRPC]
-    void UpdateHealthMe(string _uid)
-    {
-        Debug.Log("CheckID " + _uid);
-    }
-
+  
 
 
 
