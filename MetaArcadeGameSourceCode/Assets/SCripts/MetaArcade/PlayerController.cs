@@ -569,7 +569,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
 
         yield return new WaitForSeconds(0.1f);
 
-       
+        AudioManager.insta.playSound(8);
         WeaponCollider.SetActive(false);
         yield return new WaitForSeconds(0.4f);
         animator.SetBool("punch", false);

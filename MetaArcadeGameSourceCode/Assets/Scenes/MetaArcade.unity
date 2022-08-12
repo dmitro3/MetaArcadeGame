@@ -2395,7 +2395,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: You don't have enough coins to play this game
+  m_text: You don't have enough stars to purchase this theme.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5345f1ef54e70da48aec47c9a1368bf0, type: 2}
   m_sharedMaterial: {fileID: 2995395759938253766, guid: 5345f1ef54e70da48aec47c9a1368bf0, type: 2}
@@ -4473,7 +4473,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 222348108}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 605, y: 0, z: 65.106735}
+  m_LocalPosition: {x: 1842, y: 0, z: 65.106735}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 426691599}
@@ -42569,8 +42569,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 19.8, y: 233.6, z: 452.68}
-  m_Center: {x: -127.2, y: 0, z: 61.5}
+  m_Size: {x: 18.507172, y: 233.6, z: 452.68}
+  m_Center: {x: -97.464905, y: 0, z: 61.5}
 --- !u!65 &2034172528
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -42582,8 +42582,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 19.8, y: 233.6, z: 452.68}
-  m_Center: {x: 127.2, y: 0, z: 61.5}
+  m_Size: {x: 19.277794, y: 233.6, z: 452.68}
+  m_Center: {x: 101.64609, y: 0, z: 61.5}
 --- !u!65 &2034172529
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -42595,8 +42595,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 340.7, y: 233.6, z: 1}
-  m_Center: {x: 0, y: 0, z: 231.85}
+  m_Size: {x: 340.7, y: 233.6, z: 28.066147}
+  m_Center: {x: 0, y: 0, z: 166.82645}
 --- !u!65 &2034172530
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -42608,8 +42608,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 340.7, y: 233.6, z: 1}
-  m_Center: {x: 0, y: 0, z: -110.73}
+  m_Size: {x: 340.7, y: 233.6, z: 15.0987625}
+  m_Center: {x: 0, y: 0, z: -89.27231}
 --- !u!1001 &2038787407
 PrefabInstance:
   m_ObjectHideFlags: 0

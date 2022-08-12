@@ -95,9 +95,10 @@ public class BlockChainManager : MonoBehaviour
             }
             // load next scene
         }
-#endif
         playBTN.SetActive(true);
         loginBTN.SetActive(false);
+#endif
+
     }
 
     async private void OnConnected()

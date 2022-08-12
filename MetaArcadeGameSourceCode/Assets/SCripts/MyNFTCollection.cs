@@ -118,6 +118,10 @@ public class MyNFTCollection : MonoBehaviour
         Debug.Log(i);
         UIManager.insta.ShowInfoMsg("Changed Theme");
         MetaManager.insta.myPlayer.GetComponent<PlayerController>().SelectMaterial(i);
+
+        ClosePurchasePanel();
+        CloseItemPanel();
+
     }
 
     public void ClosePurchasePanel()
