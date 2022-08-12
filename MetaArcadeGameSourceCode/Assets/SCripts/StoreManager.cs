@@ -1,3 +1,4 @@
+using Defective.JSON;
 using System;
 using TMPro;
 using UnityEngine;
@@ -8,7 +9,10 @@ public class StoreManager : MonoBehaviour
     public static StoreManager insta;
     [SerializeField] GameObject itemPanelUI;
     [SerializeField] GameObject itemPurchaseUI;
-
+    [SerializeField] GameObject LoadingImage;
+    [SerializeField] GameObject ShopUI;
+    [SerializeField] GameObject[] ThemesItems;
+    [SerializeField] GameObject ThemeSection;
     //item panel stuff
     //[SerializeField] Button[] itemButtons;
 
@@ -36,8 +40,48 @@ public class StoreManager : MonoBehaviour
     private void OnEnable()
     {
         balanceText.text = "Balance : " + BlockChainManager.userBalance.ToString();
+
+        DisableOwnedItems();
     }
 
+    async public void DisableOwnedItems()
+    {
+        LoadingImage.SetActive(true);
+        ShopUI.SetActive(false);
+        string result = await BlockChainManager.Instance.CheckNFTBalance();
+        if (!string.IsNullOrEmpty(result) && result != "[]")
+        {
+            Debug.Log(result);
+            JSONObject jsonObject = new JSONObject(result);
+            for (int i = 0; i < jsonObject.count; i++)
+            {
+
+                Debug.Log(jsonObject[i].GetField("tokenId"));
+
+                if (jsonObject[i].GetField("tokenId").stringValue.StartsWith("40"))
+                {
+                    ThemesItems[Int32.Parse(jsonObject[i].GetField("tokenId").stringValue) - 401].SetActive(false);
+                }
+            }
+
+            bool all_purchased = true;
+            for (int i = 0; i < ThemesItems.Length; i++)
+            {
+                if (ThemesItems[i].activeSelf)
+                {
+                    all_purchased = false;
+                }
+            }
+            if (all_purchased)
+            {
+                ThemeSection.SetActive(false);
+            }
+        }
+
+
+        LoadingImage.SetActive(false);
+        ShopUI.SetActive(true);
+    }
     public void SelectItem(int _no, Texture _texture)
     {
         Debug.Log("Selected item " + _no);

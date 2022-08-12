@@ -19,6 +19,7 @@ public class MetaManager : MonoBehaviour
 
 
     public Transform[] racePositions;
+    public GameObject tempObject;
 
     //public static GameObject fightPlayer;
     //public static Photon.Pun.PhotonView fighterView;    
@@ -61,10 +62,7 @@ public class MetaManager : MonoBehaviour
 
     private void Update()
     {
-        if (inChallengePlayer != null)
-        {
-            Debug.Log(inChallengePlayer.NickName);
-        }
+       
     }
     public void StopMovement()
     {

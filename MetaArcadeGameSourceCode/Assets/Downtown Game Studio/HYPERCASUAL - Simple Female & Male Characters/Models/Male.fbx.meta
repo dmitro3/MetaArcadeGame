@@ -1,9 +1,24 @@
 fileFormatVersion: 2
 guid: 1d78607769d52804ebcf22480781bd15
 ModelImporter:
-  serializedVersion: 20101
+  serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.020
+    second: {fileID: 2100000, guid: cd736d56a96acf54ab048d1318c8d64b, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Ceki
+    second: {fileID: 2800000, guid: 176e44c02afaa7a4385b5b3bd6160c0c, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Male
+    second: {fileID: 2800000, guid: 83bbf17943a4aec4a97c31937a538949, type: 3}
   materials:
     materialImportMode: 1
     materialName: 0
@@ -95,6 +110,7 @@ ModelImporter:
   animationType: 2
   humanoidOversampling: 1
   avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
   additionalBone: 0
   userData: 
   assetBundleName: 

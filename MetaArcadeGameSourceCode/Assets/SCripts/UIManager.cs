@@ -61,6 +61,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] FrostweepGames.WebGLPUNVoice.Recorder recorder;
     [SerializeField] FrostweepGames.WebGLPUNVoice.Listener lister;
 
+    [Header("GAme Complete UI")]
+    [SerializeField] GameObject gameoverUI;
+    [SerializeField] TMP_Text winnerText;
+    [SerializeField] TMP_Text starsgotText;
 
     [Header("VoiceChat")]
     [SerializeField] Image recorderImg;
@@ -71,6 +75,7 @@ public class UIManager : MonoBehaviour
 
     [Header("StoreAndCollection")]
     [SerializeField] GameObject myCollectionUI;
+    [SerializeField] TMP_Text TxtHeaderCollection;
 
 
     [Header("Result")]
@@ -167,6 +172,7 @@ public class UIManager : MonoBehaviour
                     }
                     MyNFTCollection.insta.GenerateItem(Int32.Parse(jsonObject[i].GetField("tokenId").stringValue));
                 }
+                TxtHeaderCollection.text = "My Collection";
                 myCollectionUI.SetActive(true);
             }
             else MessaeBox.insta.showMsg("Nothing in collection", true);
@@ -204,7 +210,7 @@ public class UIManager : MonoBehaviour
                     }
                     MyNFTCollection.insta.GenerateItem(Int32.Parse(jsonObject[i].GetField("tokenId").stringValue));
                 }
-
+                TxtHeaderCollection.text = "Themes";
                 myCollectionUI.SetActive(true);
             }
             else MessaeBox.insta.showMsg("Nothing in collection", true);
@@ -455,30 +461,31 @@ public class UIManager : MonoBehaviour
 
     }
 
+    bool won = false;
     public void ShowGameCompleteUI( bool wonGame, int coinsChange)
     {
-       
-
-        txt_result.text = "Result : " + ((wonGame) ? "Won" : "Lose");
+        won = wonGame;
         if (wonGame)
         {
-            txt_score_change.text = "Score Change: " + coinsChange.ToString();
+            winnerText.text = "Congrats! You won!";
+             starsgotText.text = "stars gained: " + coinsChange.ToString();
         }
         else
         {
-            txt_score_change.text = "Score Change: " + "0";
+            winnerText.text = "Oops! You Got Hit!";
+            starsgotText.text = "stars gained: " + coinsChange.ToString();
         }
-        MiniGameCompleteUI.SetActive(true);
-        LeanTween.scale(MiniGameCompleteUI.transform.GetChild(0).gameObject, Vector3.one, 0.5f).setEase(LeanTweenType.easeInQuad);
+        gameoverUI.SetActive(true);
+        LeanTween.scale(gameoverUI.transform.GetChild(0).gameObject, Vector3.one, 0.5f).setEase(LeanTweenType.easeInQuad);
     }
 
     
 
     public void CloseGameCompleteUI()
     {
-        MetaManager.insta.myPlayer.GetComponent<PlayerController>().ResumeMovement();
-        LeanTween.scale(MiniGameCompleteUI.transform.GetChild(0).gameObject, Vector3.zero, 0.5f).setEase(LeanTweenType.easeInQuad).setOnComplete(() => {
-            MiniGameCompleteUI.SetActive(false);
+        MetaManager.insta.myPlayer.GetComponent<PlayerController>().IncreaseXP(won);
+        LeanTween.scale(gameoverUI.transform.GetChild(0).gameObject, Vector3.zero, 0.5f).setEase(LeanTweenType.easeInQuad).setOnComplete(() => {
+            gameoverUI.SetActive(false);
         });
     }
 
@@ -487,6 +494,10 @@ public class UIManager : MonoBehaviour
    
     async public void ShowNFTPopup(int level)
     {
+        if (level == 0)
+        {
+            return;
+        }
         NFTPopup.SetActive(true);
         nft_coontract_id =Mathf.Clamp( 499+ level,500,504);
         claimBTN.SetActive(true);
@@ -558,7 +569,12 @@ public class UIManager : MonoBehaviour
         LeanTween.scale(NFTPopup.transform.GetChild(0).gameObject, Vector3.zero, 0.5f).setEase(LeanTweenType.easeInQuad).setOnComplete(() => {
             NFTPopup.SetActive(false);
         });
-        BlockChainManager.Instance.purchaseItem(nft_coontract_id-500, false);      
+        BlockChainManager.Instance.purchaseItem(nft_coontract_id-496, false);      
+    }
+
+    public void BuyThemeFromShop(int index)
+    {        
+        BlockChainManager.Instance.purchaseItem(index, false);
     }
 
     public void ShowNoCoinsPopup()
@@ -627,6 +643,14 @@ public class UIManager : MonoBehaviour
 
         StartCoroutine(disableTextInfo());
     }
+    public void ShowInfoMsg(string info)
+    {
+        txt_information.transform.parent.gameObject.SetActive(true);
+        
+        txt_information.text = info;       
+
+        StartCoroutine(disableTextInfo());
+    }
     IEnumerator disableTextInfo()
     {
         yield return new WaitForSeconds(3f);
@@ -658,12 +682,7 @@ public class UIManager : MonoBehaviour
        // PhotonView photonView = PhotonView.Get(this);
        // photonView.RPC("UpdateHealthMe", RpcTarget.All, PhotonNetwork.LocalPlayer.UserId);
     }
-    [PunRPC]
-    void UpdateHealthMe(string _uid)
-    {
-        Debug.Log("CheckID " + _uid);
-    }
-
+  
 
 
 

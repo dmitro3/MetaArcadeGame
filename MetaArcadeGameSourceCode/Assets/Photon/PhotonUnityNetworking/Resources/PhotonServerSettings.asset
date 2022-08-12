@@ -17,7 +17,7 @@ MonoBehaviour:
     AppIdFusion: 
     AppIdChat: 
     AppIdVoice: 
-    AppVersion: 5.0
+    AppVersion: 5.5
     UseNameServer: 1
     FixedRegion: in
     Server: 
@@ -40,6 +40,7 @@ MonoBehaviour:
   - UpdateHealth
   - UpdateHealthMe
   - GameOver
+  - AttackRecieved
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

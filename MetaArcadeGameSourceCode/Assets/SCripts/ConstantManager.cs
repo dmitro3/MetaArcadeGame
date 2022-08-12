@@ -2,7 +2,7 @@
 
 public static class ConstantManager 
 {
-    public const string getProfile_api = "https://firestore.googleapis.com/v1/projects/metahackprojects/databases/(default)/documents/metaarcade_gamedata/";
+    public const string getProfile_api = "https://firestore.googleapis.com/v1/projects/metahackprojects/databases/(default)/documents/metaarcade_userdata/";
 
     public const string getgameNFTData_api = "https://firestore.googleapis.com/v1/projects/metahackprojects/databases/(default)/documents/metaarcade_gamedata/nft_data";
 
