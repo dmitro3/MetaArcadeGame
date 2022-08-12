@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
     [SerializeField] CharacterController cc;
     [SerializeField] Camera playerCamera;
     [SerializeField] Camera cam;
+
     [SerializeField] CinemachineInputProvider camera_rotate_input;
 
 
@@ -40,6 +41,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
 
 
     [Header("Player Properties")]
+    [SerializeField] AnimationCurve punchEffect;
     [Tooltip("How far in degrees can you move the camera up")]
     public float TopClamp = 70.0f;
     [Tooltip("How far in degrees can you move the camera down")]
@@ -163,6 +165,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
     [SerializeField] Image tutorial_image;
     
 
+    
     #region Mouse Click Action
     private void Attack_canceled(InputAction.CallbackContext obj)
     {
@@ -420,7 +423,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
             else
             {
                 verticalDirection.y += -1 * gravity * Time.deltaTime;
-                gravity = gravity + gravity * Time.deltaTime;
+                gravity = gravity + gravity * Time.deltaTime * ((isPlayingMiniGame)?RaceObjectPool.Instance.speed/2:1);
             }
 
             
@@ -474,6 +477,19 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
             if (!MetaManager.isPlayingMinigame)
             {
                 isSprinting = _actionSprint.IsPressed();
+                animator.SetFloat("runspeed",1);
+
+                if(playerActionAsset.Player.Attack.triggered && isOnGround && !animator.GetBool("punch"))
+                {
+                    StopMovement();
+                    animator.SetBool("punch", true);
+                    
+                    StartCoroutine(ResetAttack());
+                }
+            }
+            else
+            {
+                animator.SetFloat("runspeed",Mathf.Clamp(RaceObjectPool.Instance.speed/2,1,2));
             }
             
             if (isEmoteUIOpened)
@@ -501,19 +517,50 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
                 WeaponCollider.SetActive(false);
             }*/
 
-            
-
             moveDirection = Vector3.zero;
 
             cc.Move(verticalDirection * Time.deltaTime);
-
             
-
-                
+            
+            Debug.Log(impact);
+            cc.Move(impact * AttackForce   * Time.deltaTime);
         }
     }
 
-    
+    public Vector3 impact = Vector3.zero;
+    public float AttackForce=3f;
+    public void AttackRecieved(Vector3 position)
+    {
+        Debug.Log("Attack Recieved");
+        impact = (this.transform.position - position);
+        LeanTween.move(MetaManager.insta.tempObject, Vector3.zero, 0.3f).setFrom(impact).setEase(punchEffect).setOnUpdate((Vector3 pos)=> {
+            impact = pos;
+        }).setOnComplete(()=> {
+            impact = Vector3.zero;
+        });
+    }
+    [PunRPC]
+    public void AttackRecieved(string attacker_id)
+    {
+        MetaManager.insta.myPlayer.GetComponent<PlayerController>().AttackRecieved(this.transform.position);
+    }
+
+    IEnumerator ResetAttack()
+    {
+        yield return new WaitForSeconds(0.15f);
+        WeaponCollider.SetActive(true);
+        animator.SetBool("punch", false);
+
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+
+        WeaponCollider.SetActive(false);
+        yield return new WaitForSeconds(0.5f);
+        ResumeMovement();
+       
+    }
+
+
 
     private void LateUpdate()
     {
@@ -1052,6 +1099,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
                     meetUI.SetActive(true);
                     //virtualWorldUI.SetActive(true);
                 }
+                
             }
         }
        
