@@ -76,6 +76,7 @@ public class UIManager : MonoBehaviour
     [Header("StoreAndCollection")]
     [SerializeField] GameObject myCollectionUI;
     [SerializeField] TMP_Text TxtHeaderCollection;
+    [SerializeField] GameObject nothingInCollectionMsg;
 
 
     [Header("Result")]
@@ -177,7 +178,17 @@ public class UIManager : MonoBehaviour
             }
             else MessaeBox.insta.showMsg("Nothing in collection", true);
             LoadingPanel.SetActive(false);
-            
+
+            if (!MyNFTCollection.insta.hasItems())
+            {
+                nothingInCollectionMsg.GetComponent<TMP_Text>().text = "Nothing in collection!";
+                nothingInCollectionMsg.SetActive(true);
+            }
+            else
+            {
+                nothingInCollectionMsg.SetActive(false);
+            }
+
         }
         else
         {
@@ -214,6 +225,17 @@ public class UIManager : MonoBehaviour
                 myCollectionUI.SetActive(true);
             }
             else MessaeBox.insta.showMsg("Nothing in collection", true);
+
+            if (!MyNFTCollection.insta.hasItems())
+            {
+                nothingInCollectionMsg.GetComponent<TMP_Text>().text = "No Themes purchased!\nGo to shop and buy themes!";
+                nothingInCollectionMsg.SetActive(true);
+            }
+            else
+            {
+                nothingInCollectionMsg.SetActive(false);
+            }
+
             LoadingPanel.SetActive(false);
 
         }
@@ -573,7 +595,56 @@ public class UIManager : MonoBehaviour
     }
 
     public void BuyThemeFromShop(int index)
-    {        
+    {
+        LocalData data=DatabaseManager.Instance.GetLocalData();
+        switch (index)
+        {
+            case 1:
+                {
+                    if (data.score >= 200)
+                    {
+                        data.score -= 200;
+                        DatabaseManager.Instance.UpdateData(data);
+                        UpdatePlayerUIData(true,data);
+                    }
+                    else
+                    {
+                        ShowNoCoinsPopup();
+                        return;
+                    }
+                    break;
+                }
+            case 2:
+                {
+                    if (data.score >= 200)
+                    {
+                        data.score -= 200;
+                        DatabaseManager.Instance.UpdateData(data);
+                        UpdatePlayerUIData(true, data);
+                    }
+                    else
+                    {
+                        ShowNoCoinsPopup();
+                        return;
+                    }
+                    break;
+                }
+            case 3:
+                {
+                    if (data.score >= 200)
+                    {
+                        data.score -= 200;
+                        DatabaseManager.Instance.UpdateData(data);
+                        UpdatePlayerUIData(true, data);
+                    }
+                    else
+                    {
+                        ShowNoCoinsPopup();
+                        return;
+                    }
+                    break;
+                }
+        }
         BlockChainManager.Instance.purchaseItem(index, false);
     }
 

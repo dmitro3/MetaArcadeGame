@@ -575,6 +575,8 @@ MonoBehaviour:
   - {fileID: 7323282508378232551}
   - {fileID: 6528482597175988702}
   Text_Counter: {fileID: 0}
+  GameScoreObj: {fileID: 0}
+  Text_gamescore: {fileID: 0}
   punchEffect:
     serializedVersion: 2
     m_Curve:
@@ -635,10 +637,6 @@ MonoBehaviour:
   lock_x_movement: 0
   lock_z_movement: 0
   WeaponCollider: {fileID: 5468679025758081207}
-  throwableObject: {fileID: 0}
-  throwableGranade: {fileID: 0}
-  throwForce: 7
-  throwForceGranade: 7
   healthUI: {fileID: 2877661295045392909}
   healthbarImg: {fileID: 8815664929741207154}
   selected_emote: -1

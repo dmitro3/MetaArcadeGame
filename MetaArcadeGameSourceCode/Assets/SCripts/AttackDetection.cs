@@ -20,8 +20,8 @@ public class AttackDetection : MonoBehaviour
             {
                 if (pv.Owner != p_view.Owner)
                 {
-                   
 
+                    AudioManager.insta.playSound(UnityEngine.Random.Range(20, 25));
                     this.gameObject.SetActive(false);
                     pv.RPC("AttackRecieved", p_view.Owner, other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position));
                 }

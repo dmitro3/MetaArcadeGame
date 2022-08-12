@@ -59,6 +59,10 @@ public class MyNFTCollection : MonoBehaviour
     }
 
    
+    public bool hasItems()
+    {
+        return itemParent.childCount>0;
+    }
 
     public void GenerateItem(int tokenId)
     {

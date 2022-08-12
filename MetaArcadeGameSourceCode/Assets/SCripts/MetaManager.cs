@@ -39,6 +39,8 @@ public class MetaManager : MonoBehaviour
     public UnityEngine.UI.Button actionBTN;
     public GameObject ShootArea;
     public TMPro.TMP_Text Text_miniGameTimer;
+    public GameObject GameScoreObj;
+    public TMPro.TMP_Text Text_gamescore;
     public TMPro.TMP_Text Text_miniGameCounter;
     public TMPro.TMP_Text Text_Counter;
     public GameObject crossHair;

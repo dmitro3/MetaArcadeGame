@@ -39,6 +39,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
     [SerializeField] CinemachineVirtualCamera hardFollowCam;
     [SerializeField] GameObject[] characterModels;
     [SerializeField] TMP_Text Text_Counter;
+    [SerializeField] GameObject GameScoreObj;
+    [SerializeField] TMPro.TMP_Text Text_gamescore;
 
 
     [Header("Player Properties")]
@@ -85,11 +87,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
     Quaternion weaponLastRot;
     [SerializeField] GameObject WeaponCollider;
 
-    [Header("Throwables")]
-    [SerializeField] GameObject throwableObject;
-    [SerializeField] GameObject throwableGranade;
-    [SerializeField] float throwForce = 40f;
-    [SerializeField] float throwForceGranade = 50f;
+    
 
     [Header("Health")]
     [SerializeField] GameObject healthUI;
@@ -231,6 +229,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
             Text_miniGameCounter = MetaManager.insta.Text_miniGameCounter;
             Text_Counter = MetaManager.insta.Text_Counter;
 
+            GameScoreObj = MetaManager.insta.GameScoreObj;
+            Text_gamescore = MetaManager.insta.Text_gamescore;
+
             Text_miniGameTimer.gameObject.SetActive(false);
             Text_miniGameCounter.gameObject.SetActive(false);
 
@@ -256,8 +257,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
 
             //Set XP Data
             txt_level_no.text = data.localdata.level.ToString();
-            Debug.Log((float)data.localdata.xp / ((float)(data.localdata.level + 1) * 100));
-
+          
             level_progressBar.fillAmount = (float)data.localdata.xp / ((float)(data.localdata.level + 1) * 100);
 
             player_selected_road = data.localdata.selected_road;
@@ -266,7 +266,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
 
         usernameText.text = pv.Owner.NickName;
         playerNo = int.Parse(pv.Owner.CustomProperties["char_no"].ToString());
-        Debug.Log("Player Number " + playerNo);
+        
         characterModels[playerNo].SetActive(true);
         animator = characterModels[playerNo].GetComponent<Animator>();
 
@@ -285,12 +285,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
             long currentTime = await DatabaseManager.Instance.GetCurrentTime();
 
 
-            Debug.Log("lastTimeSpin : " + lastTimeSpin);
-            Debug.Log("currentTime : " + currentTime);
+         
 
             long diff = currentTime - lastTimeSpin;
 
-            Debug.Log("difference : " + diff);
+            
             //if (lastTimeSpin != null && currentTime != null)
             {
                 //TimeSpan ts = currentTime - lastTimeSpin;
@@ -476,6 +475,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
             else
             {
                 animator.SetFloat("runspeed",Mathf.Clamp(RaceObjectPool.Instance.speed/2,1,2));
+               
             }
             
             if (isEmoteUIOpened)
@@ -487,6 +487,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
             if (RaceObjectPool.isRaceOn)
             {
                 race_timer += Time.deltaTime;
+                stars_got = (int)race_timer / 2;
+                Text_gamescore.text = stars_got.ToString();
             }
 
 /*
@@ -508,7 +510,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
             cc.Move(verticalDirection * Time.deltaTime);
             
             
-            Debug.Log(impact);
+            
             cc.Move(impact * AttackForce   * Time.deltaTime);
         }
     }
@@ -518,7 +520,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
     GameObject go;
     public void GotAttack(Vector3 position,Vector3 triggerPoint)
     {
-        Debug.Log("Attack Recieved");
+        
         if (playerNo == 0)
         {
             AudioManager.insta.playSound(0);
@@ -567,7 +569,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
 
         yield return new WaitForSeconds(0.1f);
 
-        AudioManager.insta.playSound(UnityEngine.Random.Range(20,25));
+       
         WeaponCollider.SetActive(false);
         yield return new WaitForSeconds(0.4f);
         animator.SetBool("punch", false);
@@ -752,14 +754,14 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         if (MetaManager.isPlayingMinigame) { return; }
 
-        Debug.Log("RequestFight" + pv.Owner.NickName);
-        Debug.Log("RequestFightID" + pv.Owner.UserId);
+      //  Debug.Log("RequestFight" + pv.Owner.NickName);
+      //  Debug.Log("RequestFightID" + pv.Owner.UserId);
         MetaManager._fighterid = pv.Owner.UserId;
         AudioManager.insta.playSound(2);
         // MetaManager.insta.myPlayer.GetComponent<MyCharacter>().pview.RPC("RequestFightRPC", RpcTarget.All, pview.Owner.UserId);
         pv.RPC("RequestFightRPC", RpcTarget.All, pv.Owner.UserId);
 
-        Debug.Log("RequestFight My " + MetaManager.insta.myPlayer.GetComponent<PhotonView>().Owner.UserId + " | figher " + MetaManager._fighterid);
+      //  Debug.Log("RequestFight My " + MetaManager.insta.myPlayer.GetComponent<PhotonView>().Owner.UserId + " | figher " + MetaManager._fighterid);
 
 
         UIManager.insta.UpdateStatus("Fight request sent to\n" + pv.Owner.NickName);
@@ -768,16 +770,16 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
     [PunRPC]
     void RequestFightRPC(string _uid, PhotonMessageInfo info)
     {
-        Debug.Log("uidPre " + _uid);
+      //  Debug.Log("uidPre " + _uid);
         if (pv.IsMine)
         {
 
-            Debug.Log("uid " + _uid);
+            //Debug.Log("uid " + _uid);
             if (pv.Owner.UserId.Equals(_uid))
             {
                 if (MetaManager.fightReqPlayer != null || MetaManager.isPlayingMinigame ) return;
 
-                Debug.LogFormat("Info: {0} {1}", info.Sender, info.photonView.IsMine);
+              //  Debug.LogFormat("Info: {0} {1}", info.Sender, info.photonView.IsMine);
 
                 MetaManager._fighterid = info.Sender.UserId;
                 MetaManager.fightReqPlayer = info.Sender;
@@ -787,7 +789,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
                 UIManager.insta.FightReq(info.Sender.ToString());
                 AudioManager.insta.playSound(3);
 
-                Debug.Log("RequestFightRPC My " + MetaManager.insta.myPlayer.GetComponent<PhotonView>().Owner.UserId + " | figher " + MetaManager._fighterid);
+              //  Debug.Log("RequestFightRPC My " + MetaManager.insta.myPlayer.GetComponent<PhotonView>().Owner.UserId + " | figher " + MetaManager._fighterid);
 
             }
         }
@@ -806,7 +808,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
             else MessaeBox.insta.showMsg("No virtual world item", true);
         }
 
-        Debug.Log("data" + pv.Owner.CustomProperties["virtualworld"].ToString());
+     //   Debug.Log("data" + pv.Owner.CustomProperties["virtualworld"].ToString());
 
 
 
@@ -857,9 +859,16 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
  */
 
     #region  Race Management
+
+    int stars_got;
     IEnumerator GoToRacePos(int i,float yPos)
     {
         lastWorldPos = this.transform.position;
+
+        stars_got = 0;
+
+        GameScoreObj.SetActive(true);
+        Text_gamescore.text = stars_got.ToString();
 
         MetaManager.isPlayingMinigame = true;
 
@@ -873,12 +882,12 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
         RaceObjectPool.Instance.gameObject.transform.position = pos;
 
         yield return new WaitForSeconds(0.1f);
-        Debug.Log("POSITION CHANGED");
+       // Debug.Log("POSITION CHANGED");
 
         fpsCam.Priority = 0;
         hardFollowCam.Priority = 10;
 
-        Debug.Log("TEST 1 HERE" + transform.position);
+      //  Debug.Log("TEST 1 HERE" + transform.position);
 
         cc.enabled = false;
         this.transform.position = MetaManager.insta.racePositions[i].position;
@@ -886,7 +895,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
         cc.enabled = true;
         
 
-        Debug.Log("TEST 2 HERE" + transform.position);
+       // Debug.Log("TEST 2 HERE" + transform.position);
 
         vCamTarget.transform.localRotation = Quaternion.identity;
         _cinemachineTargetYaw= vCamTarget.transform.rotation.eulerAngles.y;
@@ -932,25 +941,22 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
         this.transform.position = MetaManager.insta.racePositions[i].position;
         this.transform.rotation = MetaManager.insta.racePositions[i].rotation;
         cc.enabled = true;
-
     
     }
     IEnumerator Countdown(int j,int pos)
     {
         UIManager.insta.ToggleExtraButtons(false);
-    Debug.Log("TEST 3 HERE" + transform.position);
+  //  Debug.Log("TEST 3 HERE" + transform.position);
         int t = j;
         Text_Counter.text = t.ToString();
         Text_Counter.gameObject.SetActive(true);
 
         while (t > 0)
         {
-            
-
             t -= 1;
             yield return new WaitForSeconds(1);
             Text_Counter.text = t.ToString();
-            Debug.Log("TEST 4 HERE" + transform.position);
+           // Debug.Log("TEST 4 HERE" + transform.position);
         }
 
 
@@ -970,13 +976,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public void RequestFightAction(bool _action)
     {
-        Debug.Log("RequestFightAction" + pv.Owner.NickName + " | " + pv.IsMine);
+      //  Debug.Log("RequestFightAction" + pv.Owner.NickName + " | " + pv.IsMine);
 
         float randomPos = UnityEngine.Random.Range(0, 1000);
 
         if (_action)
         {
-            Debug.Log("TESTING PART 1");
+           // Debug.Log("TESTING PART 1");
             MetaManager.isPlayingMinigame = true;
             can_move = false;
             StartCoroutine(GoToRacePos(0,randomPos));
@@ -998,7 +1004,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
 
     private void SendFightAction(bool _action,float randomYPos, string offsetJson, string _p1uid, string _p2uid)
     {
-        Debug.Log("SendFightAction OnEvent");
+       // Debug.Log("SendFightAction OnEvent");
         object[] content = new object[] { _action,randomYPos, offsetJson, _p1uid, _p2uid }; // Array contains the target position and the IDs of the selected units
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others }; // You would have to set the Receivers to All in order to receive this event on the local client as well
         PhotonNetwork.RaiseEvent(FightEventCode, content, raiseEventOptions, SendOptions.SendReliable);
@@ -1025,7 +1031,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
                 {
                     if (_action)
                     {                     
-                        Debug.Log("TESTING PART 2");
+                       // Debug.Log("TESTING PART 2");
                         UIManager.insta.UpdateStatus(PhotonNetwork.CurrentRoom.Players[photonEvent.Sender].NickName + " is ready to fight");
                         if (pv.IsMine)
                         {
@@ -1035,7 +1041,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
                             hash["isfighting"] = true;
                             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);*/
                             StartCoroutine(GoToRacePos(1,yPos));
-                            Debug.Log("TESTING PART 3");      
+                           // Debug.Log("TESTING PART 3");      
 
                             
                             
@@ -1070,7 +1076,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
             {
                 if (other.CompareTag("Meet") && !other.GetComponentInParent<PlayerController>().isPlayingMiniGame && !MetaManager.isPlayingMinigame)
                 {
-                    Debug.Log("Meet him");
+                  //  Debug.Log("Meet him");
                     meetUI.SetActive(true);
                     //virtualWorldUI.SetActive(true);
                 }
@@ -1102,7 +1108,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             if (other.CompareTag("Meet"))
             {
-                Debug.Log("Meet bye");
+               // Debug.Log("Meet bye");
                 meetUI.SetActive(false);
                // virtualWorldUI.SetActive(false);
             }
@@ -1178,7 +1184,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
 
         if (pv.IsMine)
         {
-            Debug.Log("HIT"+ hit.transform.name);
+         //   Debug.Log("HIT"+ hit.transform.name);
             if (hit.transform.CompareTag("barrier"))
             {
                 if (MetaManager.isPlayingMinigame)
@@ -1203,7 +1209,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
         player_selected_road = index - 399;
         data.localdata.selected_road = index - 399;
 
-        Debug.Log(player_selected_road);
+     //   Debug.Log(player_selected_road);
         data.UpdateData();
         SetMaterials();
     }
@@ -1216,13 +1222,14 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
             animator.SetFloat("speed", 0);
 
             if (_won) {
-                AudioManager.insta.playSound(9);
-                    }
+                AudioManager.insta.playSound(6);
+            }
             else
             {
-
+                AudioManager.insta.playSound(7);
             }
-            Debug.Log(" I won the game? " + _won + " ,Race Timer is "+ race_timer);
+
+         
             isRaceBegan = false;
             MetaManager.isPlayingMinigame = false;
             isSprinting = false;
@@ -1234,12 +1241,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
             this.transform.position = lastWorldPos;
             cc.enabled = true;
 
-            int stars_got = (int)race_timer / 2;
+            stars_got = (int)race_timer / 2;
             UIManager.insta.ShowGameCompleteUI(_won, stars_got);
             data.localdata.score += stars_got;
             data.UpdateData();
             UIManager.insta.UpdatePlayerUIData(true, data.localdata);
-           
+
+            GameScoreObj.SetActive(false);            
 
             StartCoroutine(Resetplayer());
         }
@@ -1325,20 +1333,15 @@ public class PlayerController : MonoBehaviourPunCallbacks, IOnEventCallback
 
         if (pv.IsMine)
         {
-            if (otherPlayer.UserId.Equals(MetaManager.inChallengePlayer.UserId))
-            {
-                if (MetaManager.isPlayingMinigame)
+                if (MetaManager.isPlayingMinigame)               
                 {
-                    
-
-                    Debug.Log("Player left");
-                    RaceOver(true);
-                    //ResetWeapon();
-                   // UIManager.insta.ShowResult(2);
+                    if (MetaManager.inChallengePlayer!=null && otherPlayer.UserId.Equals(MetaManager.inChallengePlayer.UserId))
+                    {
+                        RaceOver(true);
+                    }
                 }
-
             }
-        }
+        
     }
     #endregion
     private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
