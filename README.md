@@ -21,14 +21,13 @@ Meta Fun Arcade Game is metaverse mini world, where user can dance with other pl
 Blockchain: Polygon - Testnet : https://mumbai.polygonscan.com/address/0xE78261e9352231a39af92B619C02889E78eaaE7F
 
 
-### Metaverse Game - (Multiple Mini games)
-![Metaverse Game](/Images/MetaFunWorld7.jpg)
+### Meta Arcade Game - (Play - Dance - Challenge)
+![Metaverse Game](/Images/Metaverse.jpg)
 
 ### IPFS/Filecoin use with NFT.Storage 
-![NFT.Storage use](/Images/MetaFunWorld6.jpg)
+![NFT.Storage use](/Images/IPFS-Filecoin.jpg)
 
 ### Polygon Mumbai Use  
-![Polygon use](/Images/MetaFunWorld4.jpg)
-![In-App store](/Images/MetaFunWorld3.jpg)
+![Polygon use](/Images/PolygonContract.png)
 
 
