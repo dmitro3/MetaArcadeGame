@@ -13,8 +13,8 @@ Meta Fun Arcade Game is metaverse mini world, where user can dance with other pl
 ## Technologies
 - Unity Game Engine
 - Metamask wallet for authentication
-- NFT.Storage to store NFT data on IPFS/Filecoin
-- Polygon (Mumbai Testnet) for in-app purchase using matic and NFT
+- [NFT.Storage to store NFT data on IPFS/Filecoin](https://github.com/MetaArcade/MetaArcadeGame/blob/main/NFT.Storage(IPFS-Filecoin).md)
+- [Polygon (Mumbai Testnet) for in-app purchase using matic and NFT](https://github.com/MetaArcade/MetaArcadeGame/blob/main/PolygonAndContract.md)
 - Remix IDE used to create smart contract for ERC-1155 NFT and In-app store
 
 ### Smart Contract Address : 0xE78261e9352231a39af92B619C02889E78eaaE7F
